@@ -1,6 +1,6 @@
 # RedShelf PDF Downloader
 
-Automates the downloading of textbooks from RedShelf in PDF format using `selenium`. Downloads as several PDFs then merges them all into a single PDF using `pypdf`.
+Automates the downloading of textbooks from RedShelf's Brytewave eReader in PDF format using `selenium`. Downloads as several PDFs then merges them all into a single PDF using `pypdf`.
 
 ## Setup
 
