@@ -16,16 +16,16 @@ Automates the downloading of textbooks from RedShelf in PDF format using `seleni
         - The URL should look like `https://platform.virdocs.com/read/1234567/1/` where `1234567` is where your textbook ID should be located.
     * Replace the `value` fields in the `cookies` list with your actual session cookies values. This is for authenticating Selenium to be able to access the web pages.
         - To obtain these, go open up your textbook within the RedShelf eReader.
-        - Then open your browser's developer tools (press F12), click on the "Application" tab, and click on the "Cookies" tab on the left.
+        - Then open your browser's developer tools (press F12), click on the "Application" tab, and click on the "Cookies" tab.
         - Copy the "Value" field of the cookie named `session_id` and paste it into your config. 
-        - Copy the "Value" field of the cookie named `csrftoken` with the "Path" field of `/` and paste it into your config 
+        - Copy the "Value" field of the cookie that is named `csrftoken` and has "Path" field of `/` and paste it into your config 
         ![Screenshot of Cookies tab](cookies.png)
-    * Change `file_prefix` to whatever you want, typically just the name of the textbook.
+    * Change `file_prefix` to whatever you want, such as the name of the textbook. Changes the name of the PDFs created.
         - Example output if named "my_textbook": `my_textbook_0.pdf`
         - Also creates a folder of the same name within the same directory as `scrape.py` to store all of the PDFs.
 
 4. **Run**
-
+   After finishing configuring, simply run the script:
    ```bash
    python scrape.py
    ```
