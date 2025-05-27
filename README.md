@@ -40,4 +40,4 @@ Automates the downloading of textbooks from RedShelf's Brytewave eReader in PDF 
 
 ## Disclaimer
 
-**This project is intended for educational and personal use only.** The author is not responsible for any misuse or damage caused by using this tool. User assumes all responsibility. Use at your own risk, and ensure you comply with relevant copyright laws and terms of service of any content you access or download.
+This project is provided **for educational and personal-use purposes only**. Use of this tool may violate the terms of service of content providers and could be illegal under certain copyright laws in the U.S. or similar statutes in other jurisdictions. The authors **do not condone** the unauthorized reproduction, distribution, or circumvention of digital content protection measures. **You are solely responsible** for ensuring your use of this tool complies with all applicable laws and terms of service.  
