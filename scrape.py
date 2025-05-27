@@ -13,41 +13,39 @@ from pypdf import PdfWriter  # for merging the downloaded PDFs together
 
 #################### CONFIG ####################
 
-# Replace with your actual textbook ID. See GitHub documentation for instructions on obtaining this.
-# {for github}: Visit the textbook on RedShelf, and copy the ID from the URL that's right after "/read/".
-textbook_id = "20127884"
+# Prefix for the name of the output files (e.g. textbook name). Also creates folder with this name.
+file_prefix = "my_textbook"
 
-# Authentication cookies here. See GitHub documentation for instructions on obtaining this.
-# {for github}: Login to RedShelf, visit the below link, open your browser's developer tools, and copy the cookies from the "Application" tab. You should only have to replace the "value" fields.
+# Replace with your actual textbook ID. See GitHub documentation for instructions on obtaining this.
+textbook_id = "1234567"
+
+# Authentication cookie values here. See GitHub documentation for instructions on obtaining these.
 cookies = [
     {
         "name": "csrftoken",
-        "value": "kUMkZvHN4usY2Norh9Dc9HlfTY1mZnlO",
+        "value": "abcdef1234567890abcdef1234567890",
         "domain": "platform.virdocs.com",
         "path": "/"
     },
     {
         "name": "session_id",
-        "value": "kl7ctc3yiwg9vq360hgar7xg37bcvfrt",
+        "value": "abcdef1234567890abcdef1234567890",
         "domain": "platform.virdocs.com",
         "path": "/"
     }
 ]
-
-# Prefix for the name of the output files (e.g. textbook name). Also creates folder with this name.
-file_prefix = "in_mixed_company"
 
 ################## END CONFIG ##################
 
 
 
 def main():
-    # Set up Chrome in headless mode with PDF printing enabled
+    # Set up Chrome in headless mode
     chrome_options = Options()
     chrome_options.add_argument('--headless=new')
     chrome_options.add_argument('--disable-gpu')
 
-    # Locate (and create) a 'pdfs' folder next to this script
+    # Locate folder named file_prefix. Create it if it doesn't exist.
     script_dir = os.path.dirname(os.path.abspath(__file__))
     download_dir = os.path.join(script_dir, file_prefix)
     os.makedirs(download_dir, exist_ok=True)
@@ -101,6 +99,7 @@ def main():
     driver.quit()
 
 
+
 def merge_pdfs(download_dir, output_filename):
 
     # Create a PDF writer object (merged PDF is stored in this)
@@ -124,6 +123,7 @@ def merge_pdfs(download_dir, output_filename):
 
     print(f"Merged {len(pdf_paths)} files → {output_path}")
     
+
 
 if __name__ == "__main__":
     
