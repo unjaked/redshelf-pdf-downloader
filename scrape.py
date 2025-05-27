@@ -13,6 +13,10 @@ from pypdf import PdfWriter  # for merging the downloaded PDFs together
 
 #################### CONFIG ####################
 
+# Replace with your actual textbook ID. See GitHub documentation for instructions on obtaining this.
+# {for github}: Visit the textbook on RedShelf, and copy the ID from the URL that's right after "/read/".
+textbook_id = "20127884"
+
 # Authentication cookies here. See GitHub documentation for instructions on obtaining this.
 # {for github}: Login to RedShelf, visit the below link, open your browser's developer tools, and copy the cookies from the "Application" tab. You should only have to replace the "value" fields.
 cookies = [
@@ -29,10 +33,6 @@ cookies = [
         "path": "/"
     }
 ]
-
-# Replace with your actual textbook ID. See GitHub documentation for instructions on obtaining this.
-# {for github}: Visit the textbook on RedShelf, and copy the ID from the URL that's right after "/read/".
-textbook_id = "2017884"
 
 # Prefix for the name of the output files (e.g. textbook name). Also creates folder with this name.
 file_prefix = "in_mixed_company"
@@ -55,17 +55,17 @@ def main():
     # Launch the browser
     driver = webdriver.Chrome(options=chrome_options)
 
-    # First visit to set cookies
+    # Visit site and add cookies
     driver.get("https://platform.virdocs.com/")
     for cookie in cookies:
         driver.add_cookie(cookie)
 
-    page_num = 0 # Page to start from, usually 0 for the first page
+    page_num = 0 # Page to start from, 0 for the first page
     while True:
         url = f"https://platform.virdocs.com/read/document/{textbook_id}/{page_num}"
         driver.get(url)
 
-        # Wait for the web viewer to load all elements and handle network errors
+        # Wait for the web viewer to load all elements and handle network errors. Timeout after 20 seconds.
         try:
             WebDriverWait(driver, 20).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "section.chunk"))
@@ -75,17 +75,20 @@ def main():
             body_cls = driver.find_element(By.TAG_NAME, "body").get_attribute("class")
             if "neterror" in body_cls:
                 print(f"Page {page_num} returned 404. Stopping.")
+                if page_num == 0:
+                    print("[ERROR] Textbook access was unsuccessful. Please check that your textbook ID and cookies are correct.")
+                    exit(1)
             else:
                 print(f"Timeout waiting for page {page_num}. Stopping.")
             break
 
-        # Print to PDF via DevTools Protocol
+        # Print to PDF via Chrome DevTools Protocol. Outputs Base64-encoded PDF data.
         pdf_data = driver.execute_cdp_cmd("Page.printToPDF", {
             "printBackground": True,
             "format": "A4"
         })
 
-        # Decode the Base64-encoded PDF and write it out
+        # Decode the Base64-encoded PDF and write it out as a PDF file
         pdf_bytes = base64.b64decode(pdf_data['data'])
         output_path = os.path.join(download_dir, f"{file_prefix}_{page_num}.pdf")
         with open(output_path, "wb") as f:
@@ -93,12 +96,9 @@ def main():
 
         print(f"Saved page {page_num} → {output_path}")
         page_num += 1
-        # Optional: be polite to the server
         time.sleep(0.5)
 
     driver.quit()
-    print("All pages downloaded! Now merging PDFs...")
-
 
 
 def merge_pdfs(download_dir, output_filename):
@@ -126,6 +126,7 @@ def merge_pdfs(download_dir, output_filename):
     
 
 if __name__ == "__main__":
+    
     main()
 
     # Comment out this to skip merging
